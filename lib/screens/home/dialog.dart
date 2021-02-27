@@ -19,6 +19,8 @@ class _DialogFormTodoState extends State<DialogFormTodo> {
   List<Widget> doingWidgets = [];
   List<TodoDetails> listTodo = [];
 
+  final format = DateFormat("yyyy-MM-dd HH:mm");
+
   DateTime dateTime;
   @override
   Widget build(BuildContext context) {
@@ -70,8 +72,32 @@ class _DialogFormTodoState extends State<DialogFormTodo> {
                   ),
                 ),
                 SizedBox(height: 15),
-                TodoDate(
-                  dateTime: dateTime,
+                DateTimeField(
+                  decoration: InputDecoration(
+                      hintText: "Date",
+                      suffixIcon: Icon(Icons.keyboard_arrow_down_rounded)),
+                  format: format,
+                  onShowPicker: (context, currentValue) async {
+                    final date = await showDatePicker(
+                        context: context,
+                        firstDate: DateTime(1900),
+                        initialDate: currentValue ?? DateTime.now(),
+                        lastDate: DateTime(2100));
+                    if (date != null) {
+                      final time = await showTimePicker(
+                        context: context,
+                        initialTime: TimeOfDay.fromDateTime(
+                            currentValue ?? DateTime.now()),
+                      );
+                      return DateTimeField.combine(date, time);
+                    } else {
+                      return currentValue;
+                    }
+                  },
+                  onChanged: (val) {
+                    // print(val);
+                    dateTime = val;
+                  },
                 ),
               ],
             ),
@@ -88,19 +114,20 @@ class _DialogFormTodoState extends State<DialogFormTodo> {
         ),
         FlatButton(
           onPressed: () {
-            // BlocProvider.of<TodoBloc>(context).add(
-            //   TodoAddEvent(
-            //     todoModel: TodoModel(
-            //       id: 1,
-            //       createdAt: dateTime.toString(),
-            //       listTodo: listTodo,
-            //     ),
-            //   ),
-            // );
-            // BlocProvider.of<TodoBloc>(context).add(TodoReadEvent());
-            if (listTodo[0].doing.isNotEmpty && dateTime != null) {
-              return;
-            }
+            // print(dateTime);
+            // if (listTodo[0].doing.isNotEmpty && dateTime != null) {
+            //   return;
+            // }
+            BlocProvider.of<TodoBloc>(context).add(
+              TodoAddEvent(
+                todoModel: TodoModel(
+                  id: 1,
+                  createdAt: dateTime.toString(),
+                  listTodo: listTodo,
+                ),
+              ),
+            );
+            BlocProvider.of<TodoBloc>(context).add(TodoReadEvent());
           },
           textColor: Colors.black,
           child: Text('Add List'),
@@ -134,39 +161,39 @@ class _DialogFormTodoState extends State<DialogFormTodo> {
   }
 }
 
-class TodoDate extends StatelessWidget {
-  final format = DateFormat("yyyy-MM-dd HH:mm");
+// class TodoDate extends StatelessWidget {
+//   final format = DateFormat("yyyy-MM-dd HH:mm");
 
-  DateTime dateTime;
+//   DateTime dateTime;
 
-  TodoDate({@required this.dateTime});
-  @override
-  Widget build(BuildContext context) {
-    return DateTimeField(
-      decoration: InputDecoration(
-          hintText: "Date",
-          suffixIcon: Icon(Icons.keyboard_arrow_down_rounded)),
-      format: format,
-      onShowPicker: (context, currentValue) async {
-        final date = await showDatePicker(
-            context: context,
-            firstDate: DateTime(1900),
-            initialDate: currentValue ?? DateTime.now(),
-            lastDate: DateTime(2100));
-        if (date != null) {
-          final time = await showTimePicker(
-            context: context,
-            initialTime: TimeOfDay.fromDateTime(currentValue ?? DateTime.now()),
-          );
-          return DateTimeField.combine(date, time);
-        } else {
-          return currentValue;
-        }
-      },
-      onChanged: (val) {
-        // print(val);
-        dateTime = val;
-      },
-    );
-  }
-}
+//   TodoDate({@required this.dateTime});
+//   @override
+//   Widget build(BuildContext context) {
+//     return DateTimeField(
+//       decoration: InputDecoration(
+//           hintText: "Date",
+//           suffixIcon: Icon(Icons.keyboard_arrow_down_rounded)),
+//       format: format,
+//       onShowPicker: (context, currentValue) async {
+//         final date = await showDatePicker(
+//             context: context,
+//             firstDate: DateTime(1900),
+//             initialDate: currentValue ?? DateTime.now(),
+//             lastDate: DateTime(2100));
+//         if (date != null) {
+//           final time = await showTimePicker(
+//             context: context,
+//             initialTime: TimeOfDay.fromDateTime(currentValue ?? DateTime.now()),
+//           );
+//           return DateTimeField.combine(date, time);
+//         } else {
+//           return currentValue;
+//         }
+//       },
+//       onChanged: (val) {
+//         // print(val);
+//         dateTime = val;
+//       },
+//     );
+//   }
+// }

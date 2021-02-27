@@ -11,3 +11,9 @@ class TodoAddEvent extends TodoEvent{
 class TodoReadEvent extends TodoEvent{
   
 }
+
+class TodoDeleteEvent extends TodoEvent{
+  final TodoDetails todoDetails;
+
+  TodoDeleteEvent({@required this.todoDetails});
+}

@@ -41,6 +41,7 @@ class TodoDetails {
   int id;
   String doing;
   bool isDone;
+  int todoId;
 
   TodoDetails({ this.id, this.doing, this.isDone});
 
@@ -48,6 +49,7 @@ class TodoDetails {
     id = json['id'];
     doing = json['doing'];
     isDone = json['is_done'] == 1 ? true : false;
+    todoId = json['todo_id'];
   }
 
   Map<String, dynamic> toJson(){
@@ -56,6 +58,7 @@ class TodoDetails {
     data['id'] = this.id;
     data['doing'] = this.doing;
     data['is_done'] = this.isDone ? 1 : 0;
+    data['todo_id'] = this.todoId;
 
     return data;
   }

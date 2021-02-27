@@ -88,8 +88,11 @@ class DatabaseHelper {
 
     todoModel.listTodo.forEach((val) async {
       int valIsDone = val.isDone ? 1 : 0;
-      batch.insert("$tableTodoDetails",
-          {'$todoDetailsDoing': val.doing, '$isDone': valIsDone, '$todoId': id});
+      batch.insert("$tableTodoDetails", {
+        '$todoDetailsDoing': val.doing,
+        '$isDone': valIsDone,
+        '$todoId': id
+      });
     });
 
     return await batch.commit();
@@ -100,5 +103,20 @@ class DatabaseHelper {
     // var res = await db.update("todo", todoModel);
     return await db.update("$tableTodo", todoModel.toJson(),
         where: "$columnId = ?", whereArgs: [todoModel.id]);
+  }
+
+  deleteTodo(TodoDetails todoDetails) async {
+    final db = await database;
+
+    await db.delete("$tableTodoDetails",
+        where: "$columnId = ?", whereArgs: [todoDetails.id]);
+
+    var detailList = await db.rawQuery(
+        "SELECT * FROM $tableTodoDetails WHERE $todoId = ${todoDetails.todoId}");
+    // print(detailList);
+    if (detailList.length < 1) {
+      await db.delete("$tableTodo",
+          where: "$columnId = ?", whereArgs: [todoDetails.todoId]);
+    }
   }
 }

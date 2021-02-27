@@ -23,6 +23,8 @@ class TodoBloc extends Bloc<TodoEvent, TodoState> {
       yield* mapAddTodoToState(event);
     } else if (event is TodoReadEvent) {
       yield* mapReadTodoToState();
+    }else if(event is TodoDeleteEvent){
+      yield* mapDeleteTodoToState(event);
     }
   }
 
@@ -40,5 +42,9 @@ class TodoBloc extends Bloc<TodoEvent, TodoState> {
       print(_);
       yield TodoFailure();
     }
+  }
+
+  Stream<TodoState> mapDeleteTodoToState(TodoDeleteEvent event) async*{
+    _todoRepository.deleteTodo(todoDetails: event.todoDetails);
   }
 }

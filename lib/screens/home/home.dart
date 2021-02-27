@@ -4,6 +4,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:uitodo/blocs/todo/todo_bloc.dart';
 import 'package:uitodo/models/todo_model.dart';
 import 'package:uitodo/screens/home/dialog.dart';
+import 'package:uitodo/screens/home/dialog_delete.dart';
 import 'package:uitodo/utils/constants.dart';
 import 'package:intl/intl.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
@@ -50,7 +51,7 @@ class _HomeScreenState extends State<HomeScreen> {
         child: Container(
           color: bgBodyColor,
           child: Container(
-            margin: const EdgeInsets.only(top: 20, right: 15, left: 15),
+            padding: const EdgeInsets.only(top: 20, right: 15, left: 15),
             child: BlocBuilder<TodoBloc, TodoState>(
               builder: (context, state) {
                 print(state);
@@ -142,10 +143,6 @@ class _HomeScreenState extends State<HomeScreen> {
         return SlidableBehindActionPane();
       case 1:
         return SlidableStrechActionPane();
-      case 2:
-        return SlidableScrollActionPane();
-      case 3:
-        return SlidableDrawerActionPane();
       default:
         return null;
     }
@@ -167,43 +164,47 @@ class _HomeScreenState extends State<HomeScreen> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    Container(
-                      child: Icon(
-                        Icons.check,
-                        size: 30.0,
-                      ),
-                      decoration: BoxDecoration(
+                    // Container(
+                    //   child: Icon(
+                    //     Icons.check,
+                    //     size: 30.0,
+                    //   ),
+                    //   decoration: BoxDecoration(
+                    //     color: Colors.green,
+                    //     borderRadius: BorderRadius.all(
+                    //       Radius.circular(15),
+                    //     ),
+                    //   ),
+                    //   height: 50,
+                    //   width: 50,
+                    //   margin: EdgeInsets.only(left: 10),
+                    // ),
+                    actionButton(
+                        icon: Icons.check,
                         color: Colors.green,
-                        borderRadius: BorderRadius.all(
-                          Radius.circular(15),
-                        ),
-                      ),
-                      height: 50,
-                      width: 50,
-                      margin: EdgeInsets.only(left: 10),
-                    ),
-                    Container(
-                      child: Icon(
-                        Icons.delete,
-                        size: 30.0,
-                      ),
-                      decoration: BoxDecoration(
+                        function: () {}),
+                    actionButton(
+                        icon: Icons.delete,
                         color: Colors.red,
-                        borderRadius: BorderRadius.all(
-                          Radius.circular(15),
-                        ),
-                      ),
-                      height: 50,
-                      width: 50,
-                      margin: EdgeInsets.only(left: 10),
-                    ),
+                        function: () {
+                          // BlocProvider.of<TodoBloc>(context)
+                          //     .add(TodoDeleteEvent(todoDetails: todoDetails));
+                          // BlocProvider.of<TodoBloc>(context).add(TodoReadEvent());
+                          // DialogDelete()
+                          showDialog(
+                            context: context,
+                            builder: (context) {
+                              return DialogDelete(todoDetails: todoDetails,);
+                            },
+                          );
+                        }),
                   ],
                 ),
               ),
             ),
           ),
         ],
-        actionExtentRatio: 0.40,
+        actionExtentRatio: 0.35,
         child: Container(
           height: 70,
           margin: const EdgeInsets.only(bottom: 15),
@@ -225,4 +226,28 @@ class _HomeScreenState extends State<HomeScreen> {
           ),
         ),
       );
+
+  Widget actionButton(
+      {@required IconData icon,
+      @required Color color,
+      @required Function function}) {
+    return GestureDetector(
+      onTap: function,
+      child: Container(
+        child: Icon(
+          icon,
+          size: 30.0,
+        ),
+        decoration: BoxDecoration(
+          color: color,
+          borderRadius: BorderRadius.all(
+            Radius.circular(15),
+          ),
+        ),
+        height: 50,
+        width: 50,
+        margin: EdgeInsets.only(left: 10),
+      ),
+    );
+  }
 }
