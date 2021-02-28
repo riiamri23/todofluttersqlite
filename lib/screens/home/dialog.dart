@@ -5,6 +5,7 @@ import 'package:intl/intl.dart';
 import 'package:uitodo/blocs/todo/todo_bloc.dart';
 import 'package:uitodo/models/todo_model.dart';
 import 'package:uitodo/utils/constants.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 
 class DialogFormTodo extends StatefulWidget {
   const DialogFormTodo({
@@ -114,20 +115,29 @@ class _DialogFormTodoState extends State<DialogFormTodo> {
         ),
         FlatButton(
           onPressed: () {
-            // print(dateTime);
-            // if (listTodo[0].doing.isNotEmpty && dateTime != null) {
-            //   return;
-            // }
-            BlocProvider.of<TodoBloc>(context).add(
-              TodoAddEvent(
-                todoModel: TodoModel(
-                  id: 1,
-                  createdAt: dateTime.toString(),
-                  listTodo: listTodo,
+            if (dateTime != null && listTodo[0].doing.isNotEmpty) {
+              BlocProvider.of<TodoBloc>(context).add(
+                TodoAddEvent(
+                  todoModel: TodoModel(
+                    id: 1,
+                    createdAt: dateTime.toString(),
+                    listTodo: listTodo,
+                  ),
                 ),
-              ),
-            );
-            BlocProvider.of<TodoBloc>(context).add(TodoReadEvent());
+              );
+              Navigator.pop(context);
+              return;
+            }
+            
+            Fluttertoast.showToast(
+                msg: "Please do something and don't forget to fill the date",
+                toastLength: Toast.LENGTH_SHORT,
+                gravity: ToastGravity.BOTTOM,
+                timeInSecForIosWeb: 1,
+                backgroundColor: Colors.red,
+                textColor: Colors.white,
+                fontSize: 16.0);
+            // BlocProvider.of<TodoBloc>(context).add(TodoReadEvent());
           },
           textColor: Colors.black,
           child: Text('Add List'),
@@ -154,7 +164,7 @@ class _DialogFormTodoState extends State<DialogFormTodo> {
         ),
         onChanged: (val) {
           todo.doing = val;
-          print(todo.toJson());
+          // print(todo.toJson());
         },
       ),
     );

@@ -34,7 +34,8 @@ class _DialogDeleteState extends State<DialogDelete> {
           onPressed: () {
             BlocProvider.of<TodoBloc>(context)
                 .add(TodoDeleteEvent(todoDetails: widget.todoDetails));
-            BlocProvider.of<TodoBloc>(context).add(TodoReadEvent());
+            // BlocProvider.of<TodoBloc>(context).add(TodoReadEvent());
+            Navigator.pop(context);
           },
           textColor: Colors.red,
           child: Text('Delete'),

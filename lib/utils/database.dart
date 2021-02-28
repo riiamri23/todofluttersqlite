@@ -54,12 +54,10 @@ class DatabaseHelper {
 
   Future<List<TodoModel>> readTodo() async {
     final db = await database;
-    var result =
+    final List<Map<String, dynamic>> result =
         await db.rawQuery("SELECT * FROM $tableTodo ORDER BY $columnId DESC");
-    List<TodoModel> listTodo = [];
-
-    result.forEach((val) async {
-      var todoDetails = await db.rawQuery(
+    getDetails(Map<String, dynamic> val)async{
+      final List<Map<String, dynamic>> todoDetails = await db.rawQuery(
           "SELECT * FROM $tableTodoDetails WHERE $todoId = ${val['$columnId']}");
 
       TodoModel todoModel = TodoModel();
@@ -68,13 +66,19 @@ class DatabaseHelper {
       todoModel.listTodo =
           todoDetails.map((val) => TodoDetails.fromJson(val)).toList();
 
-      listTodo.add(todoModel);
-    });
+      // listTodo.add(todoModel);
+      return todoModel;
+      
+    }
+
+    List<TodoModel> listTodo = await Future.wait(result.map((val) async => await getDetails(val)).toList());
+
+    
 
     return listTodo;
   }
 
-  createTodo(TodoModel todoModel) async {
+  Future<Null> createTodo(TodoModel todoModel) async {
     final db = await database;
 
     var table = await db
@@ -95,17 +99,18 @@ class DatabaseHelper {
       });
     });
 
-    return await batch.commit();
+    await batch.commit();
+    return null;
   }
 
-  updateTodo(TodoModel todoModel) async {
+  Future<Null> updateTodo(TodoDetails todoDetails) async {
     final db = await database;
     // var res = await db.update("todo", todoModel);
-    return await db.update("$tableTodo", todoModel.toJson(),
-        where: "$columnId = ?", whereArgs: [todoModel.id]);
+    return await db.update("$tableTodo", todoDetails.toJson(),
+        where: "$columnId = ?", whereArgs: [todoDetails.id]);
   }
 
-  deleteTodo(TodoDetails todoDetails) async {
+  Future<Null> deleteTodo(TodoDetails todoDetails) async {
     final db = await database;
 
     await db.delete("$tableTodoDetails",
@@ -118,5 +123,7 @@ class DatabaseHelper {
       await db.delete("$tableTodo",
           where: "$columnId = ?", whereArgs: [todoDetails.todoId]);
     }
+
+    return null;
   }
 }

@@ -4,8 +4,9 @@ import 'package:uitodo/utils/database.dart';
 
 abstract class TodoRepository {
   Future<List<TodoModel>> fetchTodo();
-  Future<TodoModel> createTodo({@required TodoModel todoModel});
-  Future<Null> deleteTodo({@required TodoDetails todoDetails});
+  Future<List<TodoModel>> createTodo({@required TodoModel todoModel});
+  Future<List<TodoModel>> updateTodo({@required TodoDetails todoDetails});
+  Future<List<TodoModel>> deleteTodo({@required TodoDetails todoDetails});
 }
 
 class TodoRepositoryImp implements TodoRepository {
@@ -13,19 +14,29 @@ class TodoRepositoryImp implements TodoRepository {
 
   @override
   Future<List<TodoModel>> fetchTodo() async {
+    var listTodo = await dbHelper.readTodo();
+    return listTodo;
+  }
+
+  @override
+  Future<List<TodoModel>> createTodo({TodoModel todoModel}) async {
+    await dbHelper.createTodo(todoModel);
+
     return await dbHelper.readTodo();
   }
 
   @override
-  Future<TodoModel> createTodo({TodoModel todoModel}) async {
-    dbHelper.createTodo(todoModel);
+  Future<List<TodoModel>> updateTodo({@required TodoDetails todoDetails}) async{
 
-    return null;
+    await dbHelper.updateTodo(todoDetails);
+
+    return await dbHelper.readTodo();
   }
 
-  Future<Null> deleteTodo({TodoDetails todoDetails}) async {
-    dbHelper.deleteTodo(todoDetails);
+  @override
+  Future<List<TodoModel>> deleteTodo({TodoDetails todoDetails}) async {
+    await dbHelper.deleteTodo(todoDetails);
 
-    return null;
+    return await dbHelper.readTodo();
   }
 }

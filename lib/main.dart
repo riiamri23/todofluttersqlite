@@ -1,11 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:uitodo/blocs/bloc_observer.dart';
 import 'package:uitodo/blocs/todo/todo_bloc.dart';
 import 'package:uitodo/screens/home/home.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:uitodo/services/todo_repository.dart';
 
 void main() {
+  WidgetsFlutterBinding.ensureInitialized();
+  Bloc.observer = SimpleBlocObserver();
   runApp(MyApp());
 }
 

@@ -5,6 +5,7 @@ import 'package:uitodo/blocs/todo/todo_bloc.dart';
 import 'package:uitodo/models/todo_model.dart';
 import 'package:uitodo/screens/home/dialog.dart';
 import 'package:uitodo/screens/home/dialog_delete.dart';
+import 'package:uitodo/screens/home/dialog_edit.dart';
 import 'package:uitodo/utils/constants.dart';
 import 'package:intl/intl.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
@@ -50,31 +51,34 @@ class _HomeScreenState extends State<HomeScreen> {
       body: SafeArea(
         child: Container(
           color: bgBodyColor,
-          child: Container(
-            padding: const EdgeInsets.only(top: 20, right: 15, left: 15),
-            child: BlocBuilder<TodoBloc, TodoState>(
-              builder: (context, state) {
-                print(state);
-                if (state is TodoLoading) {
-                } else if (state is TodoLoaded) {
-                  return ListView.builder(
+          padding: const EdgeInsets.only(right: 15, left: 15),
+          child: BlocBuilder<TodoBloc, TodoState>(
+            builder: (context, state) {
+              if (state is TodoLoading) {
+              } else if (state is TodoLoaded) {
+                // print(state.listTodo);
+                return RefreshIndicator(
+                  onRefresh: () async {
+                    BlocProvider.of<TodoBloc>(context).add(TodoReadEvent());
+                  },
+                  child: ListView.builder(
                     itemCount: state.listTodo.length,
                     itemBuilder: (context, index) {
-                      print(state.listTodo[index].toJson());
+                      // print(state.listTodo[index].toJson());
                       return todoContainer(state.listTodo[index]);
                     },
-                  );
-                } else if (state is TodoFailure) {
-                  return Container(
-                    child: Center(
-                      child: Text('Something wrong'),
-                    ),
-                  );
-                }
+                  ),
+                );
+              } else if (state is TodoFailure) {
+                return Container(
+                  child: Center(
+                    child: Text('Something wrong'),
+                  ),
+                );
+              }
 
-                return Container();
-              },
-            ),
+              return Container();
+            },
           ),
         ),
       ),
@@ -164,37 +168,34 @@ class _HomeScreenState extends State<HomeScreen> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    // Container(
-                    //   child: Icon(
-                    //     Icons.check,
-                    //     size: 30.0,
-                    //   ),
-                    //   decoration: BoxDecoration(
-                    //     color: Colors.green,
-                    //     borderRadius: BorderRadius.all(
-                    //       Radius.circular(15),
-                    //     ),
-                    //   ),
-                    //   height: 50,
-                    //   width: 50,
-                    //   margin: EdgeInsets.only(left: 10),
-                    // ),
                     actionButton(
                         icon: Icons.check,
                         color: Colors.green,
                         function: () {}),
                     actionButton(
-                        icon: Icons.delete,
-                        color: Colors.red,
+                        icon: Icons.edit,
+                        color: Colors.blueAccent,
                         function: () {
-                          // BlocProvider.of<TodoBloc>(context)
-                          //     .add(TodoDeleteEvent(todoDetails: todoDetails));
-                          // BlocProvider.of<TodoBloc>(context).add(TodoReadEvent());
-                          // DialogDelete()
                           showDialog(
                             context: context,
                             builder: (context) {
-                              return DialogDelete(todoDetails: todoDetails,);
+                              // return DialogDelete(
+                              //   todoDetails: todoDetails,
+                              // );
+                              return DialogEdit(todoDetails: todoDetails,);
+                            },
+                          );
+                        }),
+                    actionButton(
+                        icon: Icons.delete,
+                        color: Colors.red,
+                        function: () {
+                          showDialog(
+                            context: context,
+                            builder: (context) {
+                              return DialogDelete(
+                                todoDetails: todoDetails,
+                              );
                             },
                           );
                         }),
@@ -204,7 +205,7 @@ class _HomeScreenState extends State<HomeScreen> {
             ),
           ),
         ],
-        actionExtentRatio: 0.35,
+        actionExtentRatio: 0.55,
         child: Container(
           height: 70,
           margin: const EdgeInsets.only(bottom: 15),

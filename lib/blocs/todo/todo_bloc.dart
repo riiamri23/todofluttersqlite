@@ -21,15 +21,22 @@ class TodoBloc extends Bloc<TodoEvent, TodoState> {
   ) async* {
     if (event is TodoAddEvent) {
       yield* mapAddTodoToState(event);
+      // yield* mapReadTodoToState();
     } else if (event is TodoReadEvent) {
       yield* mapReadTodoToState();
+    }else if(event is TodoUpdateEvent){
+
     }else if(event is TodoDeleteEvent){
       yield* mapDeleteTodoToState(event);
+      // yield* mapReadTodoToState();
     }
   }
 
   Stream<TodoState> mapAddTodoToState(TodoAddEvent event) async* {
-    _todoRepository.createTodo(todoModel: event.todoModel);
+    List<TodoModel> listTodo = await _todoRepository.createTodo(todoModel: event.todoModel);
+
+
+    yield TodoLoaded(listTodo: listTodo);
   }
 
   Stream<TodoState> mapReadTodoToState() async* {
@@ -37,6 +44,7 @@ class TodoBloc extends Bloc<TodoEvent, TodoState> {
 
     try {
       List<TodoModel> listTodo = await _todoRepository.fetchTodo();
+      // print(listTodo);
       yield TodoLoaded(listTodo: listTodo);
     } catch (_) {
       print(_);
@@ -44,7 +52,15 @@ class TodoBloc extends Bloc<TodoEvent, TodoState> {
     }
   }
 
+  Stream<TodoState> mapUpdateTodoToState(TodoUpdateEvent event) async* {
+    List<TodoModel> listTodo = await _todoRepository.updateTodo(todoDetails: event.todoDetails);
+
+    yield TodoLoaded(listTodo: listTodo);
+  }
+
   Stream<TodoState> mapDeleteTodoToState(TodoDeleteEvent event) async*{
-    _todoRepository.deleteTodo(todoDetails: event.todoDetails);
+    List<TodoModel> listTodo = await _todoRepository.deleteTodo(todoDetails: event.todoDetails);
+
+    yield TodoLoaded(listTodo: listTodo);
   }
 }
