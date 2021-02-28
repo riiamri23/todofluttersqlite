@@ -1,16 +1,24 @@
-# uitodo
+# Todo App Flutter
 
-A new Flutter project.
+###showcase
 
-## Getting Started
+![SHOWCASE 1](https://github.com/riiamri23/todofluttersqlite/blob/main/assets/ui/showcase1.PNG)
+![SHOWCASE 2](https://github.com/riiamri23/todofluttersqlite/blob/main/assets/ui/showcase2.PNG)
+![SHOWCASE 3](https://github.com/riiamri23/todofluttersqlite/blob/main/assets/ui/showcase3.PNG)
+![SHOWCASE 4](https://github.com/riiamri23/todofluttersqlite/blob/main/assets/ui/showcase4.PNG)
 
-This project is a starting point for a Flutter application.
+what is the recipe for this application
 
-A few resources to get you started if this is your first Flutter project:
+- Flutter
+- Flutter bloc
+- sqlite
+- ✨Magic ✨
 
-- [Lab: Write your first Flutter app](https://flutter.dev/docs/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://flutter.dev/docs/cookbook)
+### Link for mockup
+[Figma todo app](https://www.figma.com/file/HwGdISPcjlJM3q3XbqU35F/To-do-list?node-id=89%3A188)
 
-For help getting started with Flutter, view our
-[online documentation](https://flutter.dev/docs), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+## License
+
+MIT
+
+**Free Software, Hell Yeah!**
