@@ -25,28 +25,69 @@ class _HomeScreenState extends State<HomeScreen> {
     return Scaffold(
       appBar: PreferredSize(
         preferredSize: Size.fromHeight(100.0),
-        child: AppBar(
-          backgroundColor: bgAppBarColor,
-          automaticallyImplyLeading: false,
-          title: Text("Todo List"),
-          actions: [
-            IconButton(
-              icon: Icon(Icons.check),
-              onPressed: () {},
+        child: Container(
+          height: 120.0,
+          color: bgAppBarColor,
+          padding: EdgeInsets.symmetric(horizontal: 15,vertical: 10),
+          child: Align(
+            alignment: Alignment.bottomLeft,
+            child: Row(
+              children: [
+                Text("Todo List",
+                    style: TextStyle(
+                      fontSize: 20.0,
+                      color: textColor,
+                    )),
+                Spacer(),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    // IconButton(
+                    //   color: textColor,
+                    //   icon: Icon(Icons.check),
+                    //   onPressed: () {},
+                    // ),
+                    IconButton(
+                      color: textColor,
+                      icon: Icon(Icons.add),
+                      onPressed: () {
+                        showDialog(
+                          context: context,
+                          builder: (BuildContext context) {
+                            return DialogFormTodo();
+                          },
+                        );
+                      },
+                    )
+                  ],
+                ),
+              ],
             ),
-            IconButton(
-              icon: Icon(Icons.add),
-              onPressed: () {
-                showDialog(
-                  context: context,
-                  builder: (BuildContext context) {
-                    return DialogFormTodo();
-                  },
-                );
-              },
-            )
-          ],
+          ),
         ),
+        // AppBar(
+        //   backgroundColor: bgAppBarColor,
+        //   automaticallyImplyLeading: false,
+        //   title: Text("Todo List"),
+        //   actions: [
+        //     IconButton(
+        //       icon: Icon(Icons.check),
+        //       onPressed: () {},
+        //     ),
+        //     IconButton(
+        //       icon: Icon(Icons.add),
+        //       onPressed: () {
+        //         showDialog(
+        //           context: context,
+        //           builder: (BuildContext context) {
+        //             return DialogFormTodo();
+        //           },
+        //         );
+        //       },
+        //     )
+        //   ],
+        // ),
       ),
       body: SafeArea(
         child: Container(
@@ -182,7 +223,9 @@ class _HomeScreenState extends State<HomeScreen> {
                               // return DialogDelete(
                               //   todoDetails: todoDetails,
                               // );
-                              return DialogEdit(todoDetails: todoDetails,);
+                              return DialogEdit(
+                                todoDetails: todoDetails,
+                              );
                             },
                           );
                         }),

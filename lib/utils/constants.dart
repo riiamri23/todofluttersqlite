@@ -4,7 +4,7 @@ import 'package:flutter/painting.dart';
 
 const bgAppBarColor = Color(0xFF3F3F3F);
 const bgBodyColor = Color(0xFF242424);
-const textColor = Color(0xFFA1A1A1);
+const textColor = Color(0xFFCCCCCC);
 const textSecondaryColor = Color(0xFF8D8D8D);
 const textDarkerColor = Color(0xFF7B7B7B);
 const bgTodoContainerColor = Color(0xFF3E3E3E);
