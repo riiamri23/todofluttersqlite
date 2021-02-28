@@ -1,6 +1,6 @@
 # Todo App Flutter
 
-###showcase
+### Showcase
 
 ![SHOWCASE 1](https://github.com/riiamri23/todofluttersqlite/blob/main/assets/ui/showcase1.PNG)
 ![SHOWCASE 2](https://github.com/riiamri23/todofluttersqlite/blob/main/assets/ui/showcase2.PNG)
