@@ -10,7 +10,7 @@
 what is the recipe for this application
 
 - Flutter
-- Flutter bloc
+- Flutter bloc pattern
 - sqlite
 - ✨Magic ✨
 
